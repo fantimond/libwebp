@@ -47,7 +47,7 @@ for compression. The encoding flow looks like:
 ```c
 #include <webp/encode.h>
 
-// Setup a config, starting form a preset and tuning some additional
+// Setup a config, starting from a preset and tuning some additional
 // parameters
 WebPConfig config;
 if (!WebPConfigPreset(&config, WEBP_PRESET_PHOTO, quality_factor)) {
