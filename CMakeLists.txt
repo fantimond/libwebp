@@ -188,7 +188,7 @@ function(configure_pkg_config FILE)
                  "${CMAKE_CURRENT_BINARY_DIR}/${FILE}" @ONLY)
 
   if(HAVE_MATH_LIBRARY)
-    # MSVC doesn't have libm
+    # libm is not needed
     file(READ ${CMAKE_CURRENT_BINARY_DIR}/${FILE} data)
     string(REPLACE "-lm" "" data ${data})
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${FILE} ${data})
