@@ -361,7 +361,7 @@ endif()
 target_link_libraries(webpdecoder ${WEBP_DEP_LIBRARIES})
 target_include_directories(
   webpdecoder PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
-  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
             $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(
   webpdecoder
@@ -392,8 +392,8 @@ endif()
 target_link_libraries(webp ${WEBP_DEP_LIBRARIES})
 target_include_directories(
   webp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
-         $<INSTALL_INTERFACE:include>)
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(
   webp
   PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/src/webp/decode.h;\
@@ -411,7 +411,8 @@ add_library(webpdemux ${WEBP_DEMUX_SRCS})
 target_link_libraries(webpdemux webp)
 target_include_directories(
   webpdemux PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}
-  PUBLIC $<INSTALL_INTERFACE:include>)
+  INTERFACE $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 set_target_properties(
   webpdemux
   PROPERTIES
@@ -473,8 +474,6 @@ if(WEBP_BUILD_ANIM_UTILS
                     "example_util_[^ ]*")
   list(APPEND EXAMPLEUTIL_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/examples/stopwatch.h)
   add_library(exampleutil STATIC ${EXAMPLEUTIL_SRCS})
-  target_include_directories(
-    exampleutil PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>)
 
   parse_makefile_am(${CMAKE_CURRENT_SOURCE_DIR}/imageio "IMAGEIOUTILS_SRCS"
                     "imageio_util_[^ ]*")
@@ -634,8 +633,7 @@ if(WEBP_BUILD_EXTRAS)
   # webp_quality
   add_executable(webp_quality ${WEBP_QUALITY_SRCS})
   target_link_libraries(webp_quality exampleutil imagedec extras)
-  target_include_directories(webp_quality PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-                                                  ${CMAKE_CURRENT_BINARY_DIR})
+  target_include_directories(webp_quality PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
   # vwebp_sdl
   find_package(SDL)
@@ -746,7 +744,6 @@ write_basic_package_version_file(
   VERSION ${PACKAGE_VERSION} COMPATIBILITY AnyNewerVersion)
 
 # Create the Config file.
-include(CMakePackageConfigHelpers)
 # Fix libwebpmux reference. The target name libwebpmux is used for compatibility
 # purposes, but the library mentioned in WebPConfig.cmake should be the
 # unprefixed version. Note string(...) can be replaced with list(TRANSFORM ...)
